@@ -77,4 +77,17 @@ public class claseService {
     public void eliminarClasePorId(Long id) {
         claseRepository.deleteById(id);
     }
+
+    //actualizar usuario
+    public Clase actualizarClase(Long id, Clase claseActualizada) {
+        return claseRepository.findById(id).map(claseExistente -> {
+            claseExistente.setNombre(claseActualizada.getNombre());
+            claseExistente.setCapacidadMaxima(claseActualizada.getCapacidadMaxima());
+            claseExistente.setFechaInicio(claseActualizada.getFechaInicio());
+            claseExistente.setFechaFin(claseActualizada.getFechaFin());
+            claseExistente.setEntrenador(claseActualizada.getEntrenador());
+
+            return claseRepository.save(claseExistente);
+        }).orElseThrow(() -> new RuntimeException("Clase no encontrada"));
+    }
 }

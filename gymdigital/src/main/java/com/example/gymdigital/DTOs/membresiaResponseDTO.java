@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class membresiaResponseDTO {
      private Long id;
+     private Long usuarioId;
      private String estado;
      private LocalDate fechaInicio;
      private LocalDate fechaFin;

@@ -30,7 +30,8 @@ public class usuarioController {
                 usuarioNuevo.getNombre(),
                 usuarioNuevo.getEmail(),
                 usuarioNuevo.getRol().name(),
-                usuarioNuevo.getFechaRegistro()
+                usuarioNuevo.getFechaRegistro(),
+                usuarioNuevo.getTelefono()
         );
         return new ResponseEntity<>(respuesta,HttpStatus.CREATED) ;
     }
@@ -53,6 +54,22 @@ public class usuarioController {
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuarioPorId(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDTO> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+        Usuario actualizado = usuarioService.actualizarUsuario(id, usuario);
+
+
+        UsuarioResponseDTO respuesta = new UsuarioResponseDTO(
+                actualizado.getId(),
+                actualizado.getNombre(),
+                actualizado.getEmail(),
+                actualizado.getRol().name(),
+                actualizado.getFechaRegistro(),
+                actualizado.getTelefono()
+        );
+        return ResponseEntity.ok(respuesta);
     }
 
 

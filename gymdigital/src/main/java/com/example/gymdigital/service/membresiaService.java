@@ -62,4 +62,15 @@ public class membresiaService {
         membresiaRepository.deleteById(id);
     }
 
+    //actualizar membresia
+    public Membresia actualizarMembresia(Long id, Membresia membresiaActualizada) {
+        return membresiaRepository.findById(id).map(membresiaExistente -> {
+            membresiaExistente.setFechaInicio(membresiaActualizada.getFechaInicio());
+            membresiaExistente.setFechaFin(membresiaActualizada.getFechaFin());
+            membresiaExistente.setEstadoMembresia(membresiaActualizada.getEstadoMembresia());
+            // Nota: Por lo general, no se cambia el usuario dueño de la membresía.
+
+            return membresiaRepository.save(membresiaExistente);
+        }).orElseThrow(() -> new RuntimeException("Membresía no encontrada"));
+    }
 }

@@ -53,6 +53,21 @@ public class usuarioService {
         usuarioRepository.deleteById(id);
     }
 
+    public Usuario actualizarUsuario(Long id, Usuario usuarioActualizado) {
+        return usuarioRepository.findById(id).map(usuarioExistente -> {
+            usuarioExistente.setNombre(usuarioActualizado.getNombre());
+            usuarioExistente.setEmail(usuarioActualizado.getEmail());
+            usuarioExistente.setTelefono(usuarioActualizado.getTelefono());
+            usuarioExistente.setRol(usuarioActualizado.getRol());
+
+            // Solo actualizamos la contraseña si el administrador escribió una nueva
+            if (usuarioActualizado.getPassword() != null && !usuarioActualizado.getPassword().isEmpty()) {
+                usuarioExistente.setPassword(usuarioActualizado.getPassword());
+            }
+            return usuarioRepository.save(usuarioExistente);
+        }).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
+
 
 
 }

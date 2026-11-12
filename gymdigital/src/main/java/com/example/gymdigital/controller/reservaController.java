@@ -37,9 +37,20 @@ public class reservaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Reserva>> listarReservas() {
+    public ResponseEntity<List<ReservaResponseDTO>> listarReservas() {
+        List<Reserva> reservas = reservaService.buscarReserva();
 
-        return  ResponseEntity.ok(reservaService.buscarReserva());
+        List<ReservaResponseDTO> respuesta = reservas.stream()
+                .map(r -> new ReservaResponseDTO(
+                        r.getId(),
+                        r.getFechaReserva(),
+                        r.getEstado().name(),
+                        r.getUsuario().getNombre(),
+                        r.getClase().getNombre()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(respuesta);
     }
 
     @GetMapping("/{id}")

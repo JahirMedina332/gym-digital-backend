@@ -15,4 +15,5 @@ public class UsuarioResponseDTO {
     private String email;
     private String rol;
     private LocalDateTime fechaRegistro;
+    private String telefono;
 }

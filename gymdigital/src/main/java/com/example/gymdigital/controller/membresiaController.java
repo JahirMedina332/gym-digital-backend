@@ -28,6 +28,7 @@ public class membresiaController {
         Membresia m = membresiaService.crearMembresia(memebresia);
         membresiaResponseDTO respuesta = new membresiaResponseDTO(
                 m.getId(),
+                m.getUsuario().getId(),
                 m.getEstadoMembresia().name(),
                 m.getFechaInicio(),
                 m.getFechaFin(),
@@ -38,9 +39,22 @@ public class membresiaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Membresia>> listarMembresia() {
+    public ResponseEntity<List<membresiaResponseDTO>> listarMembresia() {
+        List<Membresia> membresias = membresiaService.buscarMembresias();
 
-        return  ResponseEntity.ok(membresiaService.buscarMembresias());
+
+        List<membresiaResponseDTO> respuesta = membresias.stream()
+                .map(m -> new membresiaResponseDTO(
+                        m.getId(),
+                        m.getUsuario().getId(),
+                        m.getEstadoMembresia().name(),
+                        m.getFechaInicio(),
+                        m.getFechaFin(),
+                        m.getUsuario().getNombre()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(respuesta);
     }
 
     @GetMapping("/{id}")
@@ -55,6 +69,21 @@ public class membresiaController {
     public ResponseEntity<Void> eliminarMembresia(@PathVariable Long id) {
         membresiaService.eliminarMembresiaPorId(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<membresiaResponseDTO> actualizarMembresia(@PathVariable Long id, @RequestBody Membresia membresia) {
+        Membresia m = membresiaService.actualizarMembresia(id, membresia);
+
+        membresiaResponseDTO respuesta = new membresiaResponseDTO(
+                m.getId(),
+                m.getUsuario().getId(), // <-- Añadido
+                m.getEstadoMembresia().name(),
+                m.getFechaInicio(),
+                m.getFechaFin(),
+                m.getUsuario().getNombre()
+        );
+        return ResponseEntity.ok(respuesta);
     }
 
 

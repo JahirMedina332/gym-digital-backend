@@ -73,5 +73,19 @@ public class claseController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ClaseResponseDTO> actualizarClase(@PathVariable Long id, @RequestBody Clase clase) {
+        Clase c = claseService.actualizarClase(id, clase);
+
+        ClaseResponseDTO respuesta = new ClaseResponseDTO(
+                c.getId(),
+                c.getNombre(),
+                c.getCapacidadMaxima(),
+                c.getFechaInicio(),
+                c.getFechaFin(),
+                c.getEntrenador().getNombre()
+        );
+        return ResponseEntity.ok(respuesta);
+    }
 
 }
